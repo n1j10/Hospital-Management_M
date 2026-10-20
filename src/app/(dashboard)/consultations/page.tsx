@@ -13,14 +13,17 @@ export default async function ConsultationsPage({ searchParams }: PageProps<"/co
   return (
     <div className="space-y-6">
       <PageHeader
+        eyebrow="Clinical"
         title="Consultations"
         description={`${consultations.length} consultations recorded`}
         actions={<PrimaryLinkButton href="/consultations/create">New Consultation</PrimaryLinkButton>}
       />
 
+      <div className="animate-fade-up [animation-delay:80ms]">
       <Suspense>
         <SearchInput placeholder="Search by patient or diagnosis..." />
       </Suspense>
+      </div>
 
       {consultations.length === 0 ? (
         <EmptyList heading="No consultations found" />

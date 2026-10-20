@@ -1,22 +1,29 @@
 import Link from "next/link";
-
-const activeClass = "bg-purple-600 text-white border-purple-600 shadow-xs";
-const idleClass = "border-border text-muted-foreground hover:bg-accent";
+import { cn } from "@/lib/utils";
 
 export type FilterOption = { href: string; label: string; active: boolean };
 
-/** The row of pill links used to filter lists (by status, by category...). */
+/** Segmented pill control used to filter lists (by status, by category...). */
 function FilterLinks({ options, wrap = false }: { options: FilterOption[]; wrap?: boolean }) {
   return (
-    <div className={wrap ? "flex flex-wrap gap-2" : "flex gap-2"}>
+    <div
+      className={cn(
+        "inline-flex gap-1 rounded-xl border border-border bg-muted/60 p-1",
+        wrap ? "flex-wrap" : "overflow-x-auto scrollbar-thin"
+      )}
+    >
       {options.map((option) => (
         <Link
           key={option.href}
           href={option.href}
-          className={`inline-flex h-9 items-center rounded-lg border px-3 text-xs font-medium transition-colors ${
-            option.active ? activeClass : idleClass
-          }`}
+          className={cn(
+            "relative inline-flex h-8 items-center rounded-lg px-3.5 text-xs font-semibold transition-all duration-300 whitespace-nowrap",
+            option.active
+              ? "bg-card text-teal-700 shadow-sm ring-1 ring-border dark:text-teal-300"
+              : "text-muted-foreground hover:bg-card/60 hover:text-foreground"
+          )}
         >
+          {option.active && <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-teal-500" />}
           {option.label}
         </Link>
       ))}

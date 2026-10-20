@@ -1,57 +1,47 @@
 import Link from "next/link";
-import { Phone, MapPin, Droplets, Calendar, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Phone, MapPin, Droplets, Calendar, User, CalendarPlus } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
+import InitialsAvatar from "@/components/shared/InitialsAvatar";
+import InfoTile from "@/components/shared/InfoTile";
 import { formatDate, formatAge, formatGender } from "@/lib/format";
-import { getInitials } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import type { Patient } from "@/types";
 
 export default function PatientProfileCard({ patient }: { patient: Patient }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-6">
-      <div className="flex flex-wrap items-start gap-8">
-        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600 text-white text-2xl font-bold shrink-0 shadow-md shadow-purple-500/20">
-          {getInitials(patient.fullName)}
+    <div className="surface relative overflow-hidden animate-scale-in">
+      <div className="relative h-28 bg-brand-animated">
+        <div className="absolute inset-0 bg-dots opacity-25" />
+        <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl animate-blob" />
+      </div>
+      <div className="relative px-6 pb-6">
+        <div className="-mt-12 mb-5 flex flex-wrap items-end justify-between gap-4">
+          <div className="rounded-full bg-card p-1.5 shadow-xl">
+            <InitialsAvatar name={patient.fullName} size="xl" className="h-20 w-20 text-2xl ring-0" />
+          </div>
+          <Link
+            href={`/appointments/create?patientId=${patient.id}`}
+            className={cn(buttonVariants({ variant: "brand" }), "h-10 rounded-xl px-4 font-semibold")}
+          >
+            <CalendarPlus className="h-4 w-4" />
+            Book Appointment
+          </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 flex-1">
-          <div className="flex items-center gap-2 text-sm">
-            <User className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground">Gender:</span>
-            <Badge variant="secondary">{formatGender(patient.gender)}</Badge>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground">Age:</span>
-            <span className="font-medium">{formatAge(patient.dateOfBirth)} years ({formatDate(patient.dateOfBirth)})</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Phone className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground">Phone:</span>
-            <span className="font-medium">{patient.phone}</span>
-          </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <InfoTile icon={User} label="Gender">{formatGender(patient.gender)}</InfoTile>
+          <InfoTile icon={Calendar} label="Age">
+            {formatAge(patient.dateOfBirth)} years
+            <span className="ml-1 font-normal text-muted-foreground">({formatDate(patient.dateOfBirth)})</span>
+          </InfoTile>
+          <InfoTile icon={Phone} label="Phone">{patient.phone}</InfoTile>
           {patient.bloodType && (
-            <div className="flex items-center gap-2 text-sm">
-              <Droplets className="h-4 w-4 text-red-500" />
-              <span className="text-muted-foreground">Blood Type:</span>
-              <Badge variant="outline" className="font-mono text-red-600 dark:text-red-400 border-red-500/25">
-                {patient.bloodType}
-              </Badge>
-            </div>
+            <InfoTile icon={Droplets} label="Blood Type" className="[&>span]:bg-rose-500/10 [&>span]:text-rose-600">
+              <span className="font-mono text-rose-600 dark:text-rose-400">{patient.bloodType}</span>
+            </InfoTile>
           )}
           {patient.address && (
-            <div className="flex items-center gap-2 text-sm">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span className="text-muted-foreground">Address:</span>
-              <span className="font-medium">{patient.address}</span>
-            </div>
+            <InfoTile icon={MapPin} label="Address" className="sm:col-span-2">{patient.address}</InfoTile>
           )}
-        </div>
-        <div className="shrink-0">
-          <Link href={`/appointments/create?patientId=${patient.id}`}>
-            <Button size="sm" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-md shadow-purple-500/20">
-              Book Appointment
-            </Button>
-          </Link>
         </div>
       </div>
     </div>

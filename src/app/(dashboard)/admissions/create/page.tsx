@@ -1,4 +1,6 @@
+import { BedDouble } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
+import FormCard from "@/components/form/FormCard";
 import AdmissionForm from "@/features/admissions/components/AdmissionForm";
 import { getPatientsForSelect } from "@/features/patients/queries";
 import { getDoctorsForSelect } from "@/features/doctors/queries";
@@ -15,11 +17,13 @@ export default async function CreateAdmissionPage() {
     <div className="space-y-6">
       <PageHeader title="Admit Patient" description="Register a new patient admission" backHref="/admissions" />
 
-      <div className="max-w-2xl">
-        <div className="rounded-xl border border-border bg-card p-6">
-          <AdmissionForm patients={patients} doctors={doctors} departments={departments} />
-        </div>
-      </div>
+      <FormCard
+        icon={BedDouble}
+        title="Admissions"
+        description="Admitted patients stay on the admissions board until they are discharged."
+      >
+        <AdmissionForm patients={patients} doctors={doctors} departments={departments} />
+      </FormCard>
     </div>
   );
 }

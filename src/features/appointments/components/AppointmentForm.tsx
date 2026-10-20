@@ -19,7 +19,7 @@ export default function AppointmentForm({
 }) {
   return (
     <FormContainer action={createAppointmentAction}>
-      <div className="space-y-4">
+      <div className="space-y-5">
         <FormSelect
           name="patientId"
           label="Patient"
@@ -28,6 +28,7 @@ export default function AppointmentForm({
           options={patients.map((p) => ({ value: p.id, label: p.fullName }))}
           placeholder="Select patient"
         />
+        <div className="grid gap-4 sm:grid-cols-2">
         <FormSelect
           name="doctorId"
           label="Doctor"
@@ -45,6 +46,7 @@ export default function AppointmentForm({
           options={departments.map((d) => ({ value: d.id, label: d.name }))}
           placeholder="Select department"
         />
+        </div>
         <FormInput
           name="scheduledAt"
           label="Scheduled Date & Time"

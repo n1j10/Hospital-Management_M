@@ -17,12 +17,13 @@ export default async function AppointmentsPage({ searchParams }: PageProps<"/app
   return (
     <div className="space-y-6">
       <PageHeader
+        eyebrow="Clinical"
         title="Appointments"
         description={`${appointments.length} appointments found`}
         actions={<PrimaryLinkButton href="/appointments/create">New Appointment</PrimaryLinkButton>}
       />
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between animate-fade-up [animation-delay:80ms]">
         <Suspense>
           <SearchInput placeholder="Search by patient or reason..." />
         </Suspense>

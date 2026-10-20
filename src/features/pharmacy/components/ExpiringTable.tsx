@@ -1,7 +1,8 @@
-import { Badge } from "@/components/ui/badge";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
+import Pill, { type PillTone } from "@/components/shared/Pill";
+import TableShell, { rowAnimation } from "@/components/shared/TableShell";
 import { formatDate, formatCurrency } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { daysUntil } from "../utils";
@@ -11,7 +12,7 @@ export default function ExpiringTable({ medicines }: { medicines: MedicineWithCa
   const today = new Date();
 
   return (
-    <div className="rounded-xl border border-red-500/20 bg-card overflow-hidden">
+    <TableShell className="border-rose-500/20">
       <Table>
         <TableHeader>
           <TableRow>
@@ -24,37 +25,33 @@ export default function ExpiringTable({ medicines }: { medicines: MedicineWithCa
           </TableRow>
         </TableHeader>
         <TableBody>
-          {medicines.map((med) => {
+          {medicines.map((med, i) => {
             const daysLeft = daysUntil(med.expiryDate, today);
             const isExpired = daysLeft <= 0;
             const isCritical = daysLeft <= 7 && daysLeft > 0;
+            const tone: PillTone = isExpired ? "rose" : isCritical ? "amber" : "sky";
+            const anim = rowAnimation(i);
 
             return (
-              <TableRow key={med.id} className={cn(isExpired ? "bg-red-500/10" : isCritical ? "bg-orange-500/5" : "bg-amber-500/5")}>
-                <TableCell className="font-medium">{med.name}</TableCell>
-                <TableCell><Badge variant="secondary">{med.category.name}</Badge></TableCell>
+              <TableRow key={med.id} style={anim.style} className={cn(anim.className, isExpired && "bg-rose-500/[0.05]")}>
+                <TableCell className="font-semibold">{med.name}</TableCell>
+                <TableCell><Pill>{med.category.name}</Pill></TableCell>
                 <TableCell className="text-muted-foreground">{med.quantity} {med.unit || "units"}</TableCell>
-                <TableCell className="text-muted-foreground text-sm">{formatDate(med.expiryDate)}</TableCell>
+                <TableCell className="text-muted-foreground text-sm whitespace-nowrap">{formatDate(med.expiryDate)}</TableCell>
                 <TableCell>
-                  <Badge
-                    variant="outline"
-                    className={cn(
-                      isExpired
-                        ? "text-red-600 border-red-500/30"
-                        : isCritical
-                          ? "text-orange-600 border-orange-500/30"
-                          : "text-amber-600 border-amber-500/30"
+                  <Pill tone={tone}>
+                    {(isExpired || isCritical) && (
+                      <span className={cn("h-1.5 w-1.5 rounded-full animate-pulse", isExpired ? "bg-rose-500" : "bg-amber-500")} />
                     )}
-                  >
                     {isExpired ? "Expired" : `${daysLeft} days`}
-                  </Badge>
+                  </Pill>
                 </TableCell>
-                <TableCell className="text-muted-foreground">{formatCurrency(med.price)}</TableCell>
+                <TableCell className="text-muted-foreground whitespace-nowrap">{formatCurrency(med.price)}</TableCell>
               </TableRow>
             );
           })}
         </TableBody>
       </Table>
-    </div>
+    </TableShell>
   );
 }

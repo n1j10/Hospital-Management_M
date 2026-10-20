@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { CalendarClock, MessageSquareText } from "lucide-react";
+import PageHeader from "@/components/layout/PageHeader";
 import StatusBadge from "@/components/shared/StatusBadge";
 import AppointmentActions from "@/features/appointments/components/AppointmentActions";
 import AppointmentInfoCards from "@/features/appointments/components/AppointmentInfoCards";
@@ -14,30 +13,33 @@ export default async function AppointmentDetailPage({ params }: PageProps<"/appo
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Link href="/appointments">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
-        <div className="flex-1">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-foreground">Appointment Details</h1>
+      <PageHeader
+        backHref="/appointments"
+        eyebrow="Appointment"
+        title={
+          <span className="flex flex-wrap items-center gap-3">
+            Appointment Details
             <StatusBadge status={appointment.status} />
-          </div>
-          <p className="text-sm text-muted-foreground mt-1">
+          </span>
+        }
+        description={
+          <span className="inline-flex items-center gap-1.5">
+            <CalendarClock className="h-4 w-4" />
             {formatDateTime(appointment.scheduledAt)}
-          </p>
-        </div>
-        <AppointmentActions appointment={appointment} />
-      </div>
+          </span>
+        }
+        actions={<AppointmentActions appointment={appointment} />}
+      />
 
       <AppointmentInfoCards appointment={appointment} />
 
       {appointment.reason && (
-        <div className="rounded-xl border border-border bg-card p-5">
-          <h3 className="font-semibold mb-2">Reason for Visit</h3>
-          <p className="text-muted-foreground">{appointment.reason}</p>
+        <div className="surface p-6 animate-fade-up [animation-delay:300ms]">
+          <h3 className="flex items-center gap-2 font-bold">
+            <MessageSquareText className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+            Reason for Visit
+          </h3>
+          <p className="mt-2 text-muted-foreground">{appointment.reason}</p>
         </div>
       )}
 

@@ -1,5 +1,6 @@
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { FieldLabel, fieldClass } from "./FormInput";
+import { cn } from "@/lib/utils";
 
 function FormTextarea({
   name,
@@ -18,9 +19,9 @@ function FormTextarea({
 }) {
   return (
     <div className="space-y-2">
-      <Label htmlFor={name} className="text-sm font-medium">
+      <FieldLabel htmlFor={name} required={required}>
         {label}
-      </Label>
+      </FieldLabel>
       <Textarea
         id={name}
         name={name}
@@ -28,6 +29,7 @@ function FormTextarea({
         placeholder={placeholder}
         required={required}
         rows={rows}
+        className={cn(fieldClass, "h-auto min-h-24 py-3")}
       />
     </div>
   );

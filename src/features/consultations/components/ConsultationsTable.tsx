@@ -1,14 +1,17 @@
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
+import { Pill as PillIcon } from "lucide-react";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
+import InitialsAvatar from "@/components/shared/InitialsAvatar";
+import Pill from "@/components/shared/Pill";
+import TableShell, { rowAnimation } from "@/components/shared/TableShell";
 import { formatDate } from "@/lib/format";
 import type { ConsultationWithRelations } from "@/types";
 
 export default function ConsultationsTable({ consultations }: { consultations: ConsultationWithRelations[] }) {
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
+    <TableShell>
       <Table>
         <TableHeader>
           <TableRow>
@@ -20,27 +23,33 @@ export default function ConsultationsTable({ consultations }: { consultations: C
           </TableRow>
         </TableHeader>
         <TableBody>
-          {consultations.map((con) => (
-            <TableRow key={con.id} className="hover:bg-muted/50">
-              <TableCell className="font-medium">
-                <Link href={`/consultations/${con.id}`} className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
-                  {con.patient.fullName}
+          {consultations.map((con, i) => (
+            <TableRow key={con.id} {...rowAnimation(i)}>
+              <TableCell>
+                <Link href={`/consultations/${con.id}`} className="group flex items-center gap-3">
+                  <InitialsAvatar name={con.patient.fullName} size="sm" />
+                  <span className="font-semibold transition-colors group-hover:text-teal-600 dark:group-hover:text-teal-400">
+                    {con.patient.fullName}
+                  </span>
                 </Link>
               </TableCell>
-              <TableCell>{con.doctor.user.name}</TableCell>
-              <TableCell className="max-w-[200px] truncate text-muted-foreground text-sm">
+              <TableCell className="text-foreground/80">{con.doctor.user.name}</TableCell>
+              <TableCell className="max-w-[220px] truncate text-muted-foreground text-sm">
                 {con.diagnosis || "—"}
               </TableCell>
               <TableCell>
-                <Badge variant="secondary">{con.prescriptions.length} items</Badge>
+                <Pill tone="teal">
+                  <PillIcon />
+                  {con.prescriptions.length} items
+                </Pill>
               </TableCell>
-              <TableCell className="text-muted-foreground text-sm">
+              <TableCell className="text-muted-foreground text-sm whitespace-nowrap">
                 {formatDate(con.createdAt)}
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </div>
+    </TableShell>
   );
 }

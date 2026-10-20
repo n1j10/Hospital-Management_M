@@ -13,8 +13,11 @@ export default function PrescriptionForm({
   medicines: MedicineWithCategory[];
 }) {
   return (
-    <div className="p-6 pt-4 border-t border-border">
-      <p className="text-sm font-medium mb-3">Add Prescription Item</p>
+    <div className="border-t border-border/70 bg-muted/30 p-6">
+      <p className="mb-4 flex items-center gap-2 text-sm font-bold">
+        <span className="flex h-6 w-6 items-center justify-center rounded-md bg-teal-500/15 text-teal-600">+</span>
+        Add Prescription Item
+      </p>
       <FormContainer action={addPrescriptionItemAction}>
         <input type="hidden" name="consultationId" value={consultationId} />
         <div className="flex flex-wrap gap-3">
@@ -37,7 +40,7 @@ export default function PrescriptionForm({
             <FormInput name="dosage" label="Dosage" placeholder="e.g. 1 tablet twice daily" />
           </div>
           <div className="flex items-end">
-            <SubmitButton text="Add" size="sm" />
+            <SubmitButton text="Add" size="sm" variant="brand" className="h-11 min-w-0 px-5" />
           </div>
         </div>
       </FormContainer>

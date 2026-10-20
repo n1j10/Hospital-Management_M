@@ -3,6 +3,8 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import StatusBadge from "@/components/shared/StatusBadge";
+import InitialsAvatar from "@/components/shared/InitialsAvatar";
+import TableShell, { EmptyRow, rowAnimation } from "@/components/shared/TableShell";
 import { formatDateTime } from "@/lib/format";
 import type { DepartmentWithDetails } from "@/types";
 
@@ -12,13 +14,7 @@ export default function DepartmentAppointments({
   appointments: DepartmentWithDetails["appointments"];
 }) {
   return (
-    <div className="rounded-xl border border-border bg-card">
-      <div className="p-6 pb-4">
-        <h3 className="text-lg font-semibold flex items-center gap-2">
-          <CalendarClock className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-          Recent Appointments
-        </h3>
-      </div>
+    <TableShell title="Recent Appointments" icon={CalendarClock}>
       <Table>
         <TableHeader>
           <TableRow>
@@ -29,11 +25,16 @@ export default function DepartmentAppointments({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {appointments.map((apt) => (
-            <TableRow key={apt.id}>
-              <TableCell className="font-medium">{apt.patient.fullName}</TableCell>
-              <TableCell>{apt.doctor.user.name}</TableCell>
-              <TableCell className="text-muted-foreground text-sm">
+          {appointments.map((apt, i) => (
+            <TableRow key={apt.id} {...rowAnimation(i)}>
+              <TableCell>
+                <div className="flex items-center gap-3 font-semibold">
+                  <InitialsAvatar name={apt.patient.fullName} size="sm" />
+                  {apt.patient.fullName}
+                </div>
+              </TableCell>
+              <TableCell className="text-foreground/80">{apt.doctor.user.name}</TableCell>
+              <TableCell className="text-muted-foreground text-sm whitespace-nowrap">
                 {formatDateTime(apt.scheduledAt)}
               </TableCell>
               <TableCell>
@@ -41,15 +42,9 @@ export default function DepartmentAppointments({
               </TableCell>
             </TableRow>
           ))}
-          {appointments.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={4} className="text-center text-muted-foreground py-8">
-                No recent appointments
-              </TableCell>
-            </TableRow>
-          )}
+          {appointments.length === 0 && <EmptyRow colSpan={4}>No recent appointments</EmptyRow>}
         </TableBody>
       </Table>
-    </div>
+    </TableShell>
   );
 }

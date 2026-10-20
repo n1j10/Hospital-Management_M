@@ -10,7 +10,7 @@ export default async function CategoriesPage() {
     <div className="space-y-6">
       <PageHeader title="Medicine Categories" description="Manage pharmacy categories" backHref="/pharmacy" />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[360px_1fr]">
         <CategoryForm />
         <CategoriesTable categories={categories} />
       </div>

@@ -1,28 +1,45 @@
+"use client";
+
 import Link from "next/link";
-import { Activity } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { buttonVariants } from "@/components/ui/button";
+import Logo from "@/components/layout/Logo";
+import DarkMode from "@/components/layout/DarkMode";
+import { cn } from "@/lib/utils";
 
 export default function LandingNav() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 to-cyan-600 text-white">
-              <Activity className="h-5 w-5" />
-            </div>
-            <span className="text-lg font-bold tracking-tight">MediCare</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/login">
-              <Button variant="ghost">Sign In</Button>
-            </Link>
-            <Link href="/register">
-              <Button className="bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white">
-                Get Started
-              </Button>
-            </Link>
-          </div>
+    <nav
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+        scrolled ? "glass border-b border-border/70 shadow-sm" : "bg-transparent"
+      )}
+    >
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/">
+          <Logo />
+        </Link>
+        <div className="hidden items-center gap-8 text-sm font-medium text-muted-foreground md:flex">
+          <a href="#features" className="transition-colors hover:text-foreground">Features</a>
+          <a href="#stats" className="transition-colors hover:text-foreground">Why MediCare</a>
+        </div>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <DarkMode />
+          <Link href="/login" className={cn(buttonVariants({ variant: "ghost" }), "hidden h-10 rounded-xl px-4 font-semibold sm:inline-flex")}>
+            Sign In
+          </Link>
+          <Link href="/register" className={cn(buttonVariants({ variant: "brand" }), "h-10 rounded-xl px-4 font-semibold")}>
+            Get Started
+          </Link>
         </div>
       </div>
     </nav>

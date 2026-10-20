@@ -9,21 +9,20 @@ export default function LoginPage() {
       <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-20">
         <div className="mx-auto w-full max-w-md">
           <AuthBrand />
-          <h1 className="text-2xl font-bold text-foreground">Welcome back</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <h1 className="text-3xl font-extrabold tracking-tight text-foreground animate-fade-up [animation-delay:80ms]">
+            Welcome back <span className="inline-block origin-[70%_70%] animate-[wiggle_2.5s_ease-in-out_infinite]">👋</span>
+          </h1>
+          <p className="mt-2 text-muted-foreground animate-fade-up [animation-delay:140ms]">
             Sign in to your account to continue
           </p>
           <LoginForm />
         </div>
       </div>
 
-      {/* Right — Decorative */}
+      {/* Right — Showcase */}
       <AuthHero
         title="Hospital Management System"
         description="Manage patients, doctors, appointments, pharmacy, and more with our comprehensive healthcare solution."
-        gradient="from-purple-600 via-indigo-600 to-blue-600"
-        topBlob="left-20"
-        bottomBlob="right-20"
       />
     </div>
   );

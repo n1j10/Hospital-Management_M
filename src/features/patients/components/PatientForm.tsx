@@ -12,9 +12,9 @@ const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((b) =>
 export default function PatientForm() {
   return (
     <FormContainer action={createPatientAction}>
-      <div className="space-y-4">
+      <div className="space-y-5">
         <FormInput name="fullName" label="Full Name" placeholder="e.g. Ahmed Mohammed" required />
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <FormSelect
             name="gender"
             label="Gender"
@@ -32,8 +32,10 @@ export default function PatientForm() {
             placeholder="Select blood type"
           />
         </div>
-        <FormInput name="dateOfBirth" label="Date of Birth" type="date" required />
-        <FormInput name="phone" label="Phone Number" type="tel" placeholder="+964 7XX XXX XXXX" required />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <FormInput name="dateOfBirth" label="Date of Birth" type="date" required />
+          <FormInput name="phone" label="Phone Number" type="tel" placeholder="+964 7XX XXX XXXX" required />
+        </div>
         <FormTextarea name="address" label="Address" placeholder="Patient's full address..." />
         <SubmitButton text="Register Patient" />
       </div>

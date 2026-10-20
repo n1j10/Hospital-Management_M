@@ -16,7 +16,7 @@ export default function AdmissionForm({
 }) {
   return (
     <FormContainer action={createAdmissionAction}>
-      <div className="space-y-4">
+      <div className="space-y-5">
         <FormSelect
           name="patientId"
           label="Patient"
@@ -24,6 +24,7 @@ export default function AdmissionForm({
           options={patients.map((p) => ({ value: p.id, label: p.fullName }))}
           placeholder="Select patient"
         />
+        <div className="grid gap-4 sm:grid-cols-2">
         <FormSelect
           name="doctorId"
           label="Attending Doctor"
@@ -41,6 +42,7 @@ export default function AdmissionForm({
           options={departments.map((d) => ({ value: d.id, label: d.name }))}
           placeholder="Select department"
         />
+        </div>
         <FormTextarea name="reason" label="Reason for Admission" placeholder="Describe the reason for admission..." rows={3} />
         <SubmitButton text="Admit Patient" />
       </div>

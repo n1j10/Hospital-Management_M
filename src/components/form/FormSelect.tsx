@@ -5,7 +5,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
+import { FieldLabel, fieldClass } from "./FormInput";
+import { cn } from "@/lib/utils";
 
 function FormSelect({
   name,
@@ -24,16 +25,16 @@ function FormSelect({
 }) {
   return (
     <div className="space-y-2">
-      <Label htmlFor={name} className="text-sm font-medium">
+      <FieldLabel htmlFor={name} required={required}>
         {label}
-      </Label>
+      </FieldLabel>
       <Select name={name} defaultValue={defaultValue} required={required}>
-        <SelectTrigger id={name}>
+        <SelectTrigger id={name} className={cn(fieldClass, "w-full data-[size=default]:h-11")}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="rounded-xl">
           {options.map((opt) => (
-            <SelectItem key={opt.value} value={opt.value}>
+            <SelectItem key={opt.value} value={opt.value} className="rounded-lg py-2">
               {opt.label}
             </SelectItem>
           ))}

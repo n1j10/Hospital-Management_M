@@ -15,7 +15,7 @@ export default function ConsultationForm({
 }) {
   return (
     <FormContainer action={createConsultationAction}>
-      <div className="space-y-4">
+      <div className="space-y-5">
         <FormSelect
           name="appointmentId"
           label="Appointment"

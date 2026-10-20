@@ -1,4 +1,6 @@
+import { CalendarPlus } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
+import FormCard from "@/components/form/FormCard";
 import AppointmentForm from "@/features/appointments/components/AppointmentForm";
 import { getPatientsForSelect } from "@/features/patients/queries";
 import { getDoctorsForSelect } from "@/features/doctors/queries";
@@ -16,16 +18,18 @@ export default async function CreateAppointmentPage({ searchParams }: PageProps<
     <div className="space-y-6">
       <PageHeader title="New Appointment" description="Schedule a new appointment" backHref="/appointments" />
 
-      <div className="max-w-2xl">
-        <div className="rounded-xl border border-border bg-card p-6">
-          <AppointmentForm
+      <FormCard
+        icon={CalendarPlus}
+        title="Scheduling"
+        description="New appointments start as Pending — confirm or cancel them from the appointment page."
+      >
+        <AppointmentForm
             patients={patients}
             doctors={doctors}
             departments={departments}
             defaultPatientId={patientId}
           />
-        </div>
-      </div>
+      </FormCard>
     </div>
   );
 }

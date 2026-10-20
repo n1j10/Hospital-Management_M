@@ -11,8 +11,8 @@ export default async function LowStockPage() {
     <div className="space-y-6">
       <PageHeader
         title={
-          <span className="flex items-center gap-2">
-            <AlertTriangle className="h-6 w-6 text-amber-500" />
+          <span className="flex items-center gap-3">
+            <AlertTriangle className="h-9 w-9 rounded-xl bg-amber-500/15 p-2 text-amber-600 animate-float" />
             Low Stock Medicines
           </span>
         }

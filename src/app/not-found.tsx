@@ -1,21 +1,29 @@
 import Link from "next/link";
-import { Activity } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeft, Compass } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
-      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 text-white shadow-md shadow-purple-500/20">
-        <Activity className="h-6 w-6" />
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-400/15 blur-3xl animate-blob" />
+        <div className="absolute inset-0 bg-dots [mask-image:radial-gradient(circle_at_center,black,transparent_60%)]" />
       </div>
-      <h1 className="text-2xl font-bold text-foreground">Page not found</h1>
-      <p className="max-w-sm text-sm text-muted-foreground">
+      <p className="relative text-[120px] font-extrabold leading-none tracking-tighter text-brand sm:text-[180px] animate-scale-in">404</p>
+      <div className="relative -mt-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand text-white shadow-xl shadow-teal-500/30 animate-float">
+        <Compass className="h-7 w-7 animate-spin-slow" />
+      </div>
+      <h1 className="relative mt-6 text-2xl font-extrabold text-foreground animate-fade-up [animation-delay:150ms]">Page not found</h1>
+      <p className="relative mt-2 max-w-sm text-muted-foreground animate-fade-up [animation-delay:250ms]">
         The page you are looking for does not exist or was moved.
       </p>
-      <Link href="/admin">
-        <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-md shadow-purple-500/20">
-          Back to Dashboard
-        </Button>
+      <Link
+        href="/admin"
+        className={cn(buttonVariants({ variant: "brand" }), "group relative mt-8 h-11 rounded-xl px-6 font-semibold animate-fade-up [animation-delay:350ms]")}
+      >
+        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+        Back to Dashboard
       </Link>
     </div>
   );

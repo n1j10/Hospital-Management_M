@@ -31,6 +31,7 @@ export default async function PharmacyPage({ searchParams }: PageProps<"/pharmac
   return (
     <div className="space-y-6">
       <PageHeader
+        eyebrow="Inventory"
         title="Pharmacy"
         description={
           <>
@@ -45,7 +46,7 @@ export default async function PharmacyPage({ searchParams }: PageProps<"/pharmac
         actions={<PharmacyHeaderActions lowStockCount={lowStockCount} />}
       />
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between animate-fade-up [animation-delay:80ms]">
         <Suspense>
           <SearchInput placeholder="Search medicines..." />
         </Suspense>

@@ -7,7 +7,7 @@ export default async function UsersPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="System Users" description={`${users.length} registered users`} />
+      <PageHeader eyebrow="Administration" title="System Users" description={`${users.length} registered users`} />
       <UsersTable users={users} />
     </div>
   );

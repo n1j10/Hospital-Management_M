@@ -1,8 +1,10 @@
-import { Badge } from "@/components/ui/badge";
+import { Pill as PillIcon, TriangleAlert } from "lucide-react";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import DeleteButton from "@/components/shared/DeleteButton";
+import Pill from "@/components/shared/Pill";
+import TableShell, { rowAnimation } from "@/components/shared/TableShell";
 import { formatDate, formatCurrency } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { deleteMedicineAction } from "../actions";
@@ -11,43 +13,58 @@ import type { MedicineWithCategory } from "@/types";
 
 export default function MedicinesTable({ medicines }: { medicines: MedicineWithCategory[] }) {
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
+    <TableShell>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Medicine</TableHead>
             <TableHead>Category</TableHead>
-            <TableHead>Quantity</TableHead>
+            <TableHead>Stock</TableHead>
             <TableHead>Price</TableHead>
             <TableHead>Expiry Date</TableHead>
             <TableHead className="w-12"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {medicines.map((med) => {
+          {medicines.map((med, i) => {
             const lowStock = isLowStock(med);
+            const fill = Math.min(100, Math.round((med.quantity / Math.max(med.lowStockThreshold * 3, 1)) * 100));
+            const anim = rowAnimation(i);
             return (
-              <TableRow key={med.id} className={cn("hover:bg-muted/50", lowStock && "bg-amber-500/5")}>
-                <TableCell className="font-medium">
-                  <div className="flex items-center gap-2">
-                    {med.name}
-                    {lowStock && (
-                      <Badge variant="outline" className="text-amber-600 border-amber-500/30 text-xs">
-                        Low Stock
-                      </Badge>
-                    )}
+              <TableRow key={med.id} style={anim.style} className={cn(anim.className, lowStock && "bg-amber-500/[0.04]")}>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <span className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg", lowStock ? "bg-amber-500/15 text-amber-600" : "bg-teal-500/10 text-teal-600 dark:text-teal-300")}>
+                      <PillIcon className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <p className="font-semibold">{med.name}</p>
+                      {lowStock && (
+                        <p className="flex items-center gap-1 text-[11px] font-semibold text-amber-600">
+                          <TriangleAlert className="h-3 w-3" /> Low Stock
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="secondary">{med.category.name}</Badge>
+                  <Pill>{med.category.name}</Pill>
                 </TableCell>
                 <TableCell>
-                  <span className={cn("font-medium", lowStock ? "text-amber-600 dark:text-amber-400" : "")}>
-                    {med.quantity} {med.unit || "units"}
-                  </span>
+                  <div className="w-32">
+                    <p className={cn("text-sm font-semibold", lowStock ? "text-amber-600 dark:text-amber-400" : "")}>
+                      {med.quantity} <span className="font-normal text-muted-foreground">{med.unit || "units"}</span>
+                    </p>
+                    <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
+                      <div
+                        className={cn("h-full rounded-full", lowStock ? "bg-gradient-to-r from-amber-400 to-orange-500" : "bg-brand")}
+                        style={{ width: `${fill}%` }}
+                      />
+                    </div>
+                  </div>
                 </TableCell>
-                <TableCell className="text-muted-foreground">{formatCurrency(med.price)}</TableCell>
-                <TableCell className="text-muted-foreground text-sm">{formatDate(med.expiryDate)}</TableCell>
+                <TableCell className="font-semibold text-foreground/80 whitespace-nowrap">{formatCurrency(med.price)}</TableCell>
+                <TableCell className="text-muted-foreground text-sm whitespace-nowrap">{formatDate(med.expiryDate)}</TableCell>
                 <TableCell>
                   <DeleteButton actionFn={deleteMedicineAction} id={med.id} idKey="medicineId" />
                 </TableCell>
@@ -56,6 +73,6 @@ export default function MedicinesTable({ medicines }: { medicines: MedicineWithC
           })}
         </TableBody>
       </Table>
-    </div>
+    </TableShell>
   );
 }

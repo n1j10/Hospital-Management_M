@@ -1,6 +1,4 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { CircleCheckBig } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
 import AdmissionSummary from "@/features/admissions/components/AdmissionSummary";
 import DischargeForm from "@/features/admissions/components/DischargeForm";
@@ -14,13 +12,14 @@ export default async function DischargePage({ params }: PageProps<"/admissions/[
   if (admission.status === "DISCHARGED") {
     return (
       <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <Link href="/admissions"><Button variant="ghost" size="icon"><ArrowLeft className="h-4 w-4" /></Button></Link>
-          <h1 className="text-2xl font-bold">Patient Already Discharged</h1>
-        </div>
-        <div className="rounded-xl border border-border bg-card p-6">
-          <p className="text-muted-foreground">
-            {admission.patient.fullName} was discharged on {admission.dischargeDate ? formatDate(admission.dischargeDate) : "unknown date"}.
+        <PageHeader title="Patient Already Discharged" backHref="/admissions" />
+        <div className="surface flex flex-col items-center px-6 py-14 text-center animate-scale-in">
+          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 ring-8 ring-emerald-500/5 animate-float">
+            <CircleCheckBig className="h-8 w-8" />
+          </span>
+          <p className="mt-5 max-w-md text-muted-foreground">
+            <span className="font-semibold text-foreground">{admission.patient.fullName}</span> was discharged on{" "}
+            {admission.dischargeDate ? formatDate(admission.dischargeDate) : "unknown date"}.
           </p>
         </div>
       </div>
@@ -30,12 +29,13 @@ export default async function DischargePage({ params }: PageProps<"/admissions/[
   return (
     <div className="space-y-6">
       <PageHeader
+        eyebrow="Admissions"
         title="Discharge Patient"
         description={`Process discharge for ${admission.patient.fullName}`}
         backHref="/admissions"
       />
 
-      <div className="max-w-2xl space-y-4">
+      <div className="max-w-3xl space-y-5">
         <AdmissionSummary admission={admission} />
         <DischargeForm admissionId={admission.id} />
       </div>

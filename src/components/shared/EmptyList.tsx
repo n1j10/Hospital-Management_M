@@ -1,3 +1,4 @@
+import { SearchX } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function EmptyList({
@@ -10,24 +11,22 @@ function EmptyList({
   className?: string;
 }) {
   return (
-    <div className={cn("flex flex-col items-center justify-center py-16 text-center", className)}>
-      <div className="rounded-full bg-muted p-6 mb-4">
-        <svg
-          className="h-10 w-10 text-muted-foreground"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-          />
-        </svg>
+    <div
+      className={cn(
+        "surface relative flex flex-col items-center justify-center overflow-hidden px-6 py-20 text-center animate-scale-in",
+        className
+      )}
+    >
+      <div className="absolute inset-0 bg-dots opacity-60 [mask-image:radial-gradient(circle_at_center,black,transparent_70%)]" />
+      <div className="relative mb-6 animate-float">
+        <div className="absolute inset-0 -m-4 rounded-full bg-teal-500/10 blur-xl" />
+        <div className="absolute inset-0 -m-3 rounded-full border border-dashed border-teal-500/30 animate-spin-slow" />
+        <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-brand text-white shadow-xl shadow-teal-500/30">
+          <SearchX className="h-7 w-7" />
+        </div>
       </div>
-      <h3 className="text-lg font-semibold text-foreground">{heading}</h3>
-      <p className="text-sm text-muted-foreground mt-1 max-w-sm">{message}</p>
+      <h3 className="relative text-lg font-bold text-foreground">{heading}</h3>
+      <p className="relative mt-1.5 max-w-sm text-sm text-muted-foreground">{message}</p>
     </div>
   );
 }

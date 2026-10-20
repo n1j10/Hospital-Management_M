@@ -4,13 +4,15 @@ import {
 } from "@/components/ui/table";
 import StatusBadge from "@/components/shared/StatusBadge";
 import DeleteButton from "@/components/shared/DeleteButton";
+import InitialsAvatar from "@/components/shared/InitialsAvatar";
+import TableShell, { rowAnimation } from "@/components/shared/TableShell";
 import { formatDateTime } from "@/lib/format";
 import { deleteAppointmentAction } from "../actions";
 import type { AppointmentWithRelations } from "@/types";
 
 export default function AppointmentsTable({ appointments }: { appointments: AppointmentWithRelations[] }) {
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
+    <TableShell>
       <Table>
         <TableHeader>
           <TableRow>
@@ -24,15 +26,18 @@ export default function AppointmentsTable({ appointments }: { appointments: Appo
           </TableRow>
         </TableHeader>
         <TableBody>
-          {appointments.map((apt) => (
-            <TableRow key={apt.id} className="hover:bg-muted/50">
-              <TableCell className="font-medium">
-                <Link href={`/appointments/${apt.id}`} className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
-                  {apt.patient.fullName}
+          {appointments.map((apt, i) => (
+            <TableRow key={apt.id} {...rowAnimation(i)}>
+              <TableCell>
+                <Link href={`/appointments/${apt.id}`} className="group flex items-center gap-3">
+                  <InitialsAvatar name={apt.patient.fullName} size="sm" />
+                  <span className="font-semibold transition-colors group-hover:text-teal-600 dark:group-hover:text-teal-400">
+                    {apt.patient.fullName}
+                  </span>
                 </Link>
               </TableCell>
-              <TableCell>{apt.doctor.user.name}</TableCell>
-              <TableCell>{apt.department.name}</TableCell>
+              <TableCell className="text-foreground/80">{apt.doctor.user.name}</TableCell>
+              <TableCell className="text-muted-foreground">{apt.department.name}</TableCell>
               <TableCell className="text-muted-foreground text-sm whitespace-nowrap">
                 {formatDateTime(apt.scheduledAt)}
               </TableCell>
@@ -47,6 +52,6 @@ export default function AppointmentsTable({ appointments }: { appointments: Appo
           ))}
         </TableBody>
       </Table>
-    </div>
+    </TableShell>
   );
 }

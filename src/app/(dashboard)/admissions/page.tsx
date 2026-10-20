@@ -17,12 +17,13 @@ export default async function AdmissionsPage({ searchParams }: PageProps<"/admis
   return (
     <div className="space-y-6">
       <PageHeader
+        eyebrow="Clinical"
         title="Admissions"
         description={`${admissions.filter((a) => a.status === "ADMITTED").length} currently admitted`}
         actions={<PrimaryLinkButton href="/admissions/create">Admit Patient</PrimaryLinkButton>}
       />
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between animate-fade-up [animation-delay:80ms]">
         <Suspense>
           <SearchInput placeholder="Search by patient name..." />
         </Suspense>

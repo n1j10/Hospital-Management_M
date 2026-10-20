@@ -6,13 +6,13 @@ export default function StatusUpdateForm({ appointmentId, newStatus, label, vari
   appointmentId: string;
   newStatus: string;
   label: string;
-  variant?: "default" | "destructive" | "outline";
+  variant?: "brand" | "destructive" | "outline";
 }) {
   return (
     <FormContainer action={updateAppointmentStatusAction}>
       <input type="hidden" name="id" value={appointmentId} />
       <input type="hidden" name="status" value={newStatus} />
-      <SubmitButton text={label} variant={variant ?? "outline"} size="sm" />
+      <SubmitButton text={label} variant={variant ?? "outline"} size="sm" className="h-10 min-w-0 px-4" />
     </FormContainer>
   );
 }

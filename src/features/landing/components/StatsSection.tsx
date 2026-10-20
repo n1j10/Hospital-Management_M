@@ -1,24 +1,28 @@
+import { Clock, Headphones, Lock, ShieldCheck } from "lucide-react";
+import Reveal from "@/components/shared/Reveal";
+
+const stats = [
+  { value: "99.9%", label: "Uptime", icon: Clock },
+  { value: "256-bit", label: "Encryption", icon: Lock },
+  { value: "24/7", label: "Support", icon: Headphones },
+  { value: "HIPAA", label: "Compliant", icon: ShieldCheck },
+];
+
 export default function StatsSection() {
   return (
-    <section className="py-24">
+    <section id="stats" className="py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          {[
-            { value: "99.9%", label: "Uptime" },
-            { value: "256-bit", label: "Encryption" },
-            { value: "24/7", label: "Support" },
-            { value: "HIPAA", label: "Compliant" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-teal-500 to-cyan-600 bg-clip-text text-transparent">
-                {stat.value}
+        <Reveal>
+          <div className="surface relative grid grid-cols-2 gap-px overflow-hidden bg-border lg:grid-cols-4">
+            {stats.map(({ value, label, icon: Icon }) => (
+              <div key={label} className="group bg-card p-8 text-center transition-colors hover:bg-muted/40">
+                <Icon className="mx-auto h-6 w-6 text-teal-500 transition-transform duration-500 group-hover:scale-125" />
+                <div className="mt-4 text-3xl font-extrabold tracking-tight text-brand sm:text-4xl">{value}</div>
+                <div className="mt-1 text-sm font-medium text-muted-foreground">{label}</div>
               </div>
-              <div className="mt-1 text-sm text-muted-foreground">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );

@@ -1,21 +1,23 @@
 import Link from "next/link";
-import { Phone } from "lucide-react";
+import { Droplets, Phone } from "lucide-react";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import DeleteButton from "@/components/shared/DeleteButton";
+import InitialsAvatar from "@/components/shared/InitialsAvatar";
+import Pill from "@/components/shared/Pill";
+import TableShell, { rowAnimation } from "@/components/shared/TableShell";
 import { formatDate, formatAge, formatGender } from "@/lib/format";
 import { deletePatientAction } from "../actions";
 import type { Patient } from "@/types";
 
 export default function PatientsTable({ patients }: { patients: Patient[] }) {
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
+    <TableShell>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Full Name</TableHead>
+            <TableHead>Patient</TableHead>
             <TableHead>Gender</TableHead>
             <TableHead>Age</TableHead>
             <TableHead>Blood Type</TableHead>
@@ -25,53 +27,48 @@ export default function PatientsTable({ patients }: { patients: Patient[] }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {patients.map((patient) => (
-            <TableRow key={patient.id} className="hover:bg-muted/50">
-              <TableCell className="font-medium">
-                <Link
-                  href={`/patients/${patient.id}`}
-                  className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-                >
-                  {patient.fullName}
+          {patients.map((patient, i) => (
+            <TableRow key={patient.id} {...rowAnimation(i)}>
+              <TableCell>
+                <Link href={`/patients/${patient.id}`} className="group flex items-center gap-3">
+                  <InitialsAvatar name={patient.fullName} size="sm" />
+                  <span className="font-semibold transition-colors group-hover:text-teal-600 dark:group-hover:text-teal-400">
+                    {patient.fullName}
+                  </span>
                 </Link>
               </TableCell>
               <TableCell>
-                <Badge variant={patient.gender === "MALE" ? "secondary" : "outline"}>
-                  {formatGender(patient.gender)}
-                </Badge>
+                <Pill tone={patient.gender === "MALE" ? "sky" : "violet"}>{formatGender(patient.gender)}</Pill>
               </TableCell>
               <TableCell className="text-muted-foreground">
-                {formatAge(patient.dateOfBirth)} yrs
+                <span className="font-semibold text-foreground">{formatAge(patient.dateOfBirth)}</span> yrs
               </TableCell>
               <TableCell>
                 {patient.bloodType ? (
-                  <Badge variant="outline" className="font-mono text-red-700 dark:text-red-400 border-red-500/25">
+                  <Pill tone="rose" className="font-mono">
+                    <Droplets />
                     {patient.bloodType}
-                  </Badge>
+                  </Pill>
                 ) : (
                   <span className="text-muted-foreground text-sm">—</span>
                 )}
               </TableCell>
               <TableCell className="text-muted-foreground">
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 whitespace-nowrap">
                   <Phone className="h-3.5 w-3.5" />
                   {patient.phone}
                 </div>
               </TableCell>
-              <TableCell className="text-muted-foreground text-sm">
+              <TableCell className="text-muted-foreground text-sm whitespace-nowrap">
                 {formatDate(patient.createdAt)}
               </TableCell>
               <TableCell>
-                <DeleteButton
-                  actionFn={deletePatientAction}
-                  id={patient.id}
-                  idKey="patientId"
-                />
+                <DeleteButton actionFn={deletePatientAction} id={patient.id} idKey="patientId" />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </div>
+    </TableShell>
   );
 }

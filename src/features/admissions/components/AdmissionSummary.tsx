@@ -1,32 +1,22 @@
+import { Building2, CalendarDays, Stethoscope, User } from "lucide-react";
+import InfoTile from "@/components/shared/InfoTile";
 import { formatDate } from "@/lib/format";
 import type { AdmissionWithRelations } from "@/types";
 
 export default function AdmissionSummary({ admission }: { admission: AdmissionWithRelations }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-6 space-y-3">
-      <h3 className="font-semibold">Admission Summary</h3>
-      <div className="grid grid-cols-2 gap-4 text-sm">
-        <div>
-          <p className="text-muted-foreground">Patient</p>
-          <p className="font-medium">{admission.patient.fullName}</p>
-        </div>
-        <div>
-          <p className="text-muted-foreground">Doctor</p>
-          <p className="font-medium">{admission.doctor.user.name}</p>
-        </div>
-        <div>
-          <p className="text-muted-foreground">Department</p>
-          <p className="font-medium">{admission.department.name}</p>
-        </div>
-        <div>
-          <p className="text-muted-foreground">Admit Date</p>
-          <p className="font-medium">{formatDate(admission.admitDate)}</p>
-        </div>
+    <div className="surface p-6 animate-fade-up [animation-delay:100ms]">
+      <h3 className="mb-4 font-bold">Admission Summary</h3>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <InfoTile icon={User} label="Patient">{admission.patient.fullName}</InfoTile>
+        <InfoTile icon={Stethoscope} label="Doctor">{admission.doctor.user.name}</InfoTile>
+        <InfoTile icon={Building2} label="Department">{admission.department.name}</InfoTile>
+        <InfoTile icon={CalendarDays} label="Admit Date">{formatDate(admission.admitDate)}</InfoTile>
       </div>
       {admission.reason && (
-        <div>
-          <p className="text-muted-foreground text-sm">Reason</p>
-          <p className="text-sm">{admission.reason}</p>
+        <div className="mt-4 rounded-xl border border-border/70 bg-muted/30 p-4">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Reason</p>
+          <p className="mt-1 text-sm">{admission.reason}</p>
         </div>
       )}
     </div>

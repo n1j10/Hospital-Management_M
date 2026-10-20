@@ -1,15 +1,17 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import StatusBadge from "@/components/shared/StatusBadge";
+import InitialsAvatar from "@/components/shared/InitialsAvatar";
+import TableShell, { rowAnimation } from "@/components/shared/TableShell";
 import { formatDate } from "@/lib/format";
 import type { AdmissionWithRelations } from "@/types";
 
 export default function AdmissionsTable({ admissions }: { admissions: AdmissionWithRelations[] }) {
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
+    <TableShell>
       <Table>
         <TableHeader>
           <TableRow>
@@ -19,28 +21,35 @@ export default function AdmissionsTable({ admissions }: { admissions: AdmissionW
             <TableHead>Admit Date</TableHead>
             <TableHead>Discharge Date</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead className="w-20">Actions</TableHead>
+            <TableHead className="w-24">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {admissions.map((adm) => (
-            <TableRow key={adm.id} className="hover:bg-muted/50">
-              <TableCell className="font-medium">
-                <Link href={`/patients/${adm.patientId}`} className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
-                  {adm.patient.fullName}
+          {admissions.map((adm, i) => (
+            <TableRow key={adm.id} {...rowAnimation(i)}>
+              <TableCell>
+                <Link href={`/patients/${adm.patientId}`} className="group flex items-center gap-3">
+                  <InitialsAvatar name={adm.patient.fullName} size="sm" />
+                  <span className="font-semibold transition-colors group-hover:text-teal-600 dark:group-hover:text-teal-400">
+                    {adm.patient.fullName}
+                  </span>
                 </Link>
               </TableCell>
-              <TableCell>{adm.doctor.user.name}</TableCell>
-              <TableCell>{adm.department.name}</TableCell>
-              <TableCell className="text-muted-foreground text-sm">{formatDate(adm.admitDate)}</TableCell>
-              <TableCell className="text-muted-foreground text-sm">
+              <TableCell className="text-foreground/80">{adm.doctor.user.name}</TableCell>
+              <TableCell className="text-muted-foreground">{adm.department.name}</TableCell>
+              <TableCell className="text-muted-foreground text-sm whitespace-nowrap">{formatDate(adm.admitDate)}</TableCell>
+              <TableCell className="text-muted-foreground text-sm whitespace-nowrap">
                 {adm.dischargeDate ? formatDate(adm.dischargeDate) : "—"}
               </TableCell>
               <TableCell><StatusBadge status={adm.status} /></TableCell>
               <TableCell>
                 {adm.status === "ADMITTED" && (
-                  <Link href={`/admissions/${adm.id}/discharge`}>
-                    <Button size="sm" variant="outline" className="text-xs">Discharge</Button>
+                  <Link
+                    href={`/admissions/${adm.id}/discharge`}
+                    className="group inline-flex h-8 items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 text-xs font-semibold text-amber-700 transition-all hover:bg-amber-500 hover:text-white dark:text-amber-300"
+                  >
+                    <LogOut className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                    Discharge
                   </Link>
                 )}
               </TableCell>
@@ -48,6 +57,6 @@ export default function AdmissionsTable({ admissions }: { admissions: AdmissionW
           ))}
         </TableBody>
       </Table>
-    </div>
+    </TableShell>
   );
 }

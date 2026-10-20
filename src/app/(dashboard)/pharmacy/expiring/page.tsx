@@ -11,8 +11,8 @@ export default async function ExpiringPage() {
     <div className="space-y-6">
       <PageHeader
         title={
-          <span className="flex items-center gap-2">
-            <Clock className="h-6 w-6 text-red-500" />
+          <span className="flex items-center gap-3">
+            <Clock className="h-9 w-9 rounded-xl bg-rose-500/15 p-2 text-rose-600 animate-float" />
             Expiring Medicines
           </span>
         }

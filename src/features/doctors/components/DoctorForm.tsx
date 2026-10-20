@@ -8,7 +8,7 @@ import type { Department } from "@/types";
 export default function DoctorForm({ departments }: { departments: Department[] }) {
   return (
     <FormContainer action={createDoctorAction}>
-      <div className="space-y-4">
+      <div className="space-y-5">
         <FormInput name="name" label="Full Name" placeholder="Dr. John Smith" required />
         <FormInput name="email" label="Email" type="email" placeholder="john@hospital.com" required />
         <FormInput name="password" label="Password" type="password" placeholder="••••••••" required />

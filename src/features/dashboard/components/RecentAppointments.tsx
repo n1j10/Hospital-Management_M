@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ArrowRight, CalendarClock } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -7,9 +9,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import StatusBadge from "@/components/shared/StatusBadge";
+import InitialsAvatar from "@/components/shared/InitialsAvatar";
+import TableShell, { EmptyRow, rowAnimation } from "@/components/shared/TableShell";
 import { formatDateTime } from "@/lib/format";
 import type { AppointmentWithRelations } from "@/types";
-import Link from "next/link";
 
 function RecentAppointments({
   appointments,
@@ -17,15 +20,17 @@ function RecentAppointments({
   appointments: AppointmentWithRelations[];
 }) {
   return (
-    <div className="rounded-xl border border-border bg-card">
-      <div className="p-6 pb-4">
-        <h3 className="text-lg font-semibold text-foreground">
-          Recent Appointments
-        </h3>
-        <p className="text-sm text-muted-foreground">
-          Latest appointment activity
-        </p>
-      </div>
+    <TableShell
+      title="Recent Appointments"
+      description="Latest appointment activity"
+      icon={CalendarClock}
+      action={
+        <Link href="/appointments" className="group inline-flex items-center gap-1 text-xs font-semibold text-teal-600 hover:text-teal-700 dark:text-teal-400">
+          View all
+          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+        </Link>
+      }
+    >
       <Table>
         <TableHeader>
           <TableRow>
@@ -37,19 +42,22 @@ function RecentAppointments({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {appointments.map((apt) => (
-            <TableRow key={apt.id}>
-              <TableCell className="font-medium">
+          {appointments.map((apt, i) => (
+            <TableRow key={apt.id} {...rowAnimation(i)}>
+              <TableCell>
                 <Link
                   href={`/patients/${apt.patientId}`}
-                  className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                  className="group flex items-center gap-3 font-semibold"
                 >
-                  {apt.patient.fullName}
+                  <InitialsAvatar name={apt.patient.fullName} size="sm" />
+                  <span className="transition-colors group-hover:text-teal-600 dark:group-hover:text-teal-400">
+                    {apt.patient.fullName}
+                  </span>
                 </Link>
               </TableCell>
-              <TableCell>{apt.doctor.user.name}</TableCell>
-              <TableCell>{apt.department.name}</TableCell>
-              <TableCell className="text-muted-foreground text-sm">
+              <TableCell className="text-foreground/80">{apt.doctor.user.name}</TableCell>
+              <TableCell className="text-muted-foreground">{apt.department.name}</TableCell>
+              <TableCell className="text-muted-foreground text-sm whitespace-nowrap">
                 {formatDateTime(apt.scheduledAt)}
               </TableCell>
               <TableCell>
@@ -57,16 +65,10 @@ function RecentAppointments({
               </TableCell>
             </TableRow>
           ))}
-          {appointments.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                No recent appointments
-              </TableCell>
-            </TableRow>
-          )}
+          {appointments.length === 0 && <EmptyRow colSpan={5}>No recent appointments</EmptyRow>}
         </TableBody>
       </Table>
-    </div>
+    </TableShell>
   );
 }
 

@@ -7,7 +7,7 @@ import { createDepartmentAction } from "../actions";
 export default function DepartmentForm() {
   return (
     <FormContainer action={createDepartmentAction}>
-      <div className="space-y-4">
+      <div className="space-y-5">
         <FormInput name="name" label="Department Name" placeholder="e.g. Cardiology" required />
         <FormTextarea name="description" label="Description" placeholder="Brief description of the department..." />
         <SubmitButton text="Create Department" />

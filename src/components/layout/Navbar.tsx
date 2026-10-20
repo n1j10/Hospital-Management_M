@@ -2,8 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Bell, CheckCheck, CircleAlert, Info } from "lucide-react";
+import { Bell, CheckCheck, CircleAlert, Info, BellOff } from "lucide-react";
 import DarkMode from "./DarkMode";
+import MobileNav from "./MobileNav";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,10 +12,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import InitialsAvatar from "@/components/shared/InitialsAvatar";
 import { useReadNotifications } from "@/hooks/use-read-notifications";
+import { cn } from "@/lib/utils";
 import type { AuthPayload } from "@/lib/auth";
 import type { NavbarNotification } from "@/types";
+
+function greeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 18) return "Good afternoon";
+  return "Good evening";
+}
 
 export default function Navbar({
   user,
@@ -28,65 +37,67 @@ export default function Navbar({
     user?.userId,
     notifications
   );
-
-  const initials = user?.name
-    ? user.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
-    : "U";
+  const firstName = user?.name.split(" ")[0] ?? "there";
+  const today = new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric" }).format(new Date());
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-card/80 backdrop-blur-md px-6">
-      {/* Left — Title */}
-      <div>
-        <h2 className="text-lg font-semibold text-foreground">
-          Hospital Management System
-        </h2>
+    <header className="glass sticky top-0 z-20 flex h-[72px] items-center justify-between gap-4 border-b border-border/70 px-4 sm:px-8">
+      {/* Left — greeting */}
+      <div className="flex items-center gap-3">
+        <MobileNav />
+        <div className="animate-fade-in">
+          <h2 className="text-base font-bold text-foreground sm:text-lg" suppressHydrationWarning>
+            {greeting()}, <span className="text-brand">{firstName}</span> 👋
+          </h2>
+          <p className="hidden text-xs text-muted-foreground sm:block" suppressHydrationWarning>
+            {today}
+          </p>
+        </div>
       </div>
 
       {/* Right — Actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 sm:gap-3">
         <DarkMode />
 
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative"
+              <button
+                type="button"
+                className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card shadow-xs transition-all hover:border-teal-500/40 hover:text-teal-600"
                 aria-label={`Notifications${unreadNotifications.length ? `, ${unreadNotifications.length} unread` : ""}`}
               >
-                <Bell className="h-[18px] w-[18px]" />
+                <Bell className={cn("h-[18px] w-[18px]", unreadNotifications.length > 0 && "origin-top animate-[wiggle_2s_ease-in-out_infinite]")} />
                 {unreadNotifications.length > 0 && (
-                  <span className="absolute -right-1 -top-1 flex min-w-4 h-4 items-center justify-center rounded-full bg-purple-600 px-1 text-[10px] font-bold text-white ring-2 ring-card">
+                  <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-bold text-white ring-2 ring-card">
                     {unreadNotifications.length > 9 ? "9+" : unreadNotifications.length}
                   </span>
                 )}
-              </Button>
+              </button>
             }
           />
-          <DropdownMenuContent className="w-96 max-w-[calc(100vw-2rem)] p-0" align="end">
-            <div className="flex items-center justify-between border-b border-border px-4 py-3">
-              <div>
-                <p className="text-sm font-semibold">Notifications</p>
-                <p className="text-xs text-muted-foreground">
-                  {unreadNotifications.length ? `${unreadNotifications.length} unread alert${unreadNotifications.length === 1 ? "" : "s"}` : "You are all caught up"}
-                </p>
+          <DropdownMenuContent className="w-96 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl p-0" align="end">
+            <div className="relative overflow-hidden bg-brand px-4 py-4 text-white">
+              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/15 blur-md" />
+              <div className="relative flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-bold">Notifications</p>
+                  <p className="text-xs text-white/80">
+                    {unreadNotifications.length ? `${unreadNotifications.length} unread alert${unreadNotifications.length === 1 ? "" : "s"}` : "You are all caught up"}
+                  </p>
+                </div>
+                {unreadNotifications.length > 0 && (
+                  <Button variant="ghost" size="sm" onClick={markAllAsRead} className="h-8 rounded-lg bg-white/15 text-xs text-white hover:bg-white/25 hover:text-white">
+                    <CheckCheck className="h-3.5 w-3.5" />
+                    Mark all read
+                  </Button>
+                )}
               </div>
-              {unreadNotifications.length > 0 && (
-                <Button variant="ghost" size="sm" onClick={markAllAsRead} className="text-xs text-purple-700 dark:text-purple-300">
-                  <CheckCheck className="mr-1 h-3.5 w-3.5" />
-                  Mark all read
-                </Button>
-              )}
             </div>
-            <div className="max-h-96 overflow-y-auto p-1.5">
+            <div className="max-h-96 overflow-y-auto p-2 scrollbar-thin">
               {notifications.length === 0 ? (
-                <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+                <div className="flex flex-col items-center gap-2 px-4 py-10 text-center text-sm text-muted-foreground">
+                  <BellOff className="h-6 w-6" />
                   No operational alerts right now.
                 </div>
               ) : (
@@ -97,21 +108,21 @@ export default function Navbar({
                   return (
                     <DropdownMenuItem
                       key={notification.id}
-                      className="items-start gap-3 px-3 py-3 cursor-pointer"
+                      className={cn("cursor-pointer items-start gap-3 rounded-xl px-3 py-3", unread && "bg-teal-500/[0.05]")}
                       onClick={() => {
                         markAsRead(notification.id);
                         router.push(notification.href);
                       }}
                     >
-                      <span className={`mt-0.5 rounded-full p-1.5 ${notification.type === "warning" ? "bg-amber-500/15 text-amber-600" : "bg-blue-500/15 text-blue-600"}`}>
+                      <span className={cn("mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", notification.type === "warning" ? "bg-amber-500/15 text-amber-600" : "bg-sky-500/15 text-sky-600")}>
                         <Icon className="h-4 w-4" />
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center justify-between gap-3">
-                          <span className="truncate text-sm font-medium">{notification.title}</span>
-                          {unread && <span className="h-2 w-2 shrink-0 rounded-full bg-purple-600" aria-label="Unread" />}
+                          <span className="truncate text-sm font-semibold">{notification.title}</span>
+                          {unread && <span className="h-2 w-2 shrink-0 rounded-full bg-teal-500 shadow-[0_0_8px] shadow-teal-500" aria-label="Unread" />}
                         </span>
-                        <span className="mt-0.5 block text-xs leading-5 text-muted-foreground whitespace-normal">{notification.description}</span>
+                        <span className="mt-0.5 block whitespace-normal text-xs leading-5 text-muted-foreground">{notification.description}</span>
                       </span>
                     </DropdownMenuItem>
                   );
@@ -121,12 +132,16 @@ export default function Navbar({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Link href="/profile" aria-label="Open profile" className="rounded-full focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
-          <Avatar className="h-9 w-9">
-            <AvatarFallback className="bg-gradient-to-br from-purple-600 to-blue-600 text-white text-xs font-semibold">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
+        <Link
+          href="/profile"
+          aria-label="Open profile"
+          className="group flex items-center gap-3 rounded-xl border border-transparent py-1 pl-1 pr-1 transition-all hover:border-border hover:bg-card sm:pr-3"
+        >
+          <InitialsAvatar name={user?.name ?? "User"} className="h-9 w-9 text-xs transition-transform group-hover:scale-105" />
+          <span className="hidden flex-col leading-tight sm:flex">
+            <span className="text-sm font-semibold text-foreground">{user?.name ?? "User"}</span>
+            <span className="text-[11px] capitalize text-muted-foreground">{user?.role.toLowerCase()}</span>
+          </span>
         </Link>
       </div>
     </header>
