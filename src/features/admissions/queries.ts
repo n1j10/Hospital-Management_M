@@ -10,5 +10,5 @@ export function getAdmissions(filters?: AdmissionFilters) {
 
 /** GET /api/admissions/:id */
 export function getAdmission(id: string) {
-  return apiFetch<AdmissionWithRelations>(`/admissions/${id}`);
+  return apiFetch<AdmissionWithRelations>(`/admissions/${encodeURIComponent(id)}`);
 }

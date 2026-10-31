@@ -14,5 +14,5 @@ export function getPatientsForSelect() {
 
 /** GET /api/patients/:id */
 export function getPatient(id: string) {
-  return apiFetch<PatientWithHistory>(`/patients/${id}`);
+  return apiFetch<PatientWithHistory>(`/patients/${encodeURIComponent(id)}`);
 }

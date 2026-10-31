@@ -14,5 +14,5 @@ export function getDoctorsForSelect() {
 
 /** GET /api/doctors/:id */
 export function getDoctor(id: string) {
-  return apiFetch<DoctorWithDetails>(`/doctors/${id}`);
+  return apiFetch<DoctorWithDetails>(`/doctors/${encodeURIComponent(id)}`);
 }

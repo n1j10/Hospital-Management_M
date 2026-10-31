@@ -9,5 +9,5 @@ export function getConsultations(search?: string) {
 
 /** GET /api/consultations/:id */
 export function getConsultation(id: string) {
-  return apiFetch<ConsultationWithRelations>(`/consultations/${id}`);
+  return apiFetch<ConsultationWithRelations>(`/consultations/${encodeURIComponent(id)}`);
 }

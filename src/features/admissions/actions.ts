@@ -22,7 +22,7 @@ export async function createAdmissionAction(_prev: ActionState, formData: FormDa
 export async function dischargePatientAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const { id } = formToObject(formData);
   try {
-    await apiFetch(`/admissions/${id}/discharge`, json("PATCH"));
+    await apiFetch(`/admissions/${encodeURIComponent(id)}/discharge`, json("PATCH"));
     revalidatePath("/admissions");
   } catch (error) {
     return renderError(error);

@@ -14,5 +14,5 @@ export function getDepartmentsForSelect() {
 
 /** GET /api/departments/:id */
 export function getDepartment(id: string) {
-  return apiFetch<DepartmentWithDetails>(`/departments/${id}`);
+  return apiFetch<DepartmentWithDetails>(`/departments/${encodeURIComponent(id)}`);
 }

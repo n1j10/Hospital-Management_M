@@ -15,5 +15,5 @@ export function getAppointmentsWithoutConsultation() {
 
 /** GET /api/appointments/:id */
 export function getAppointment(id: string) {
-  return apiFetch<AppointmentWithDetails>(`/appointments/${id}`);
+  return apiFetch<AppointmentWithDetails>(`/appointments/${encodeURIComponent(id)}`);
 }
