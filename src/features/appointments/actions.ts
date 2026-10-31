@@ -22,7 +22,7 @@ export async function createAppointmentAction(_prev: ActionState, formData: Form
 export async function updateAppointmentStatusAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const { id, status } = formToObject(formData);
   try {
-    await apiFetch(`/appointments/${id}/status`, json("PATCH", { status }));
+    await apiFetch(`/appointments/${encodeURIComponent(id)}/status`, json("PATCH", { status }));
     revalidatePath(`/appointments/${id}`);
     revalidatePath("/appointments");
     return { message: `Appointment marked as ${status.toLowerCase()}` };
@@ -34,7 +34,7 @@ export async function updateAppointmentStatusAction(_prev: ActionState, formData
 /** DELETE /api/appointments/:id */
 export async function deleteAppointmentAction(prev: { appointmentId: string }): Promise<ActionState> {
   try {
-    await apiFetch(`/appointments/${prev.appointmentId}`, json("DELETE"));
+    await apiFetch(`/appointments/${encodeURIComponent(prev.appointmentId)}`, json("DELETE"));
     revalidatePath("/appointments");
     return { message: "Appointment deleted" };
   } catch (error) {

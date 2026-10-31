@@ -39,7 +39,7 @@ export async function removePrescriptionItemAction(prev: {
   consultationId: string;
 }): Promise<ActionState> {
   try {
-    await apiFetch(`/prescriptions/${prev.itemId}`, json("DELETE"));
+    await apiFetch(`/prescriptions/${encodeURIComponent(prev.itemId)}`, json("DELETE"));
     revalidatePath(`/consultations/${prev.consultationId}`);
     return { message: "Medicine removed from prescription" };
   } catch (error) {

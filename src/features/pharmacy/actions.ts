@@ -21,7 +21,7 @@ export async function createMedicineAction(_prev: ActionState, formData: FormDat
 /** DELETE /api/medicines/:id */
 export async function deleteMedicineAction(prev: { medicineId: string }): Promise<ActionState> {
   try {
-    await apiFetch(`/medicines/${prev.medicineId}`, json("DELETE"));
+    await apiFetch(`/medicines/${encodeURIComponent(prev.medicineId)}`, json("DELETE"));
     revalidatePath("/pharmacy");
     return { message: "Medicine deleted" };
   } catch (error) {
@@ -44,7 +44,7 @@ export async function createCategoryAction(_prev: ActionState, formData: FormDat
 /** DELETE /api/categories/:id */
 export async function deleteCategoryAction(prev: { categoryId: string }): Promise<ActionState> {
   try {
-    await apiFetch(`/categories/${prev.categoryId}`, json("DELETE"));
+    await apiFetch(`/categories/${encodeURIComponent(prev.categoryId)}`, json("DELETE"));
     revalidatePath("/pharmacy/categories");
     return { message: "Category deleted" };
   } catch (error) {

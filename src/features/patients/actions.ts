@@ -21,7 +21,7 @@ export async function createPatientAction(_prev: ActionState, formData: FormData
 /** DELETE /api/patients/:id */
 export async function deletePatientAction(prev: { patientId: string }): Promise<ActionState> {
   try {
-    await apiFetch(`/patients/${prev.patientId}`, json("DELETE"));
+    await apiFetch(`/patients/${encodeURIComponent(prev.patientId)}`, json("DELETE"));
     revalidatePath("/patients");
     return { message: "Patient deleted" };
   } catch (error) {
